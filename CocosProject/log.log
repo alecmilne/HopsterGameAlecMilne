@@ -1,0 +1,7 @@
+error writing "file2c2f380": broken pipe
+error writing "file2c2f380": broken pipe
+    while executing
+"puts -nonewline $fd "[encoding convertto utf-8 $path]\0""
+    (procedure "write_update_index" line 34)
+    invoked from within
+"write_update_index file2c2f380 {Classes.7z Classes/Background.cpp Classes/Branch.cpp Classes/HelloWorldScene.cpp Classes/HelloWorldScene.h Classes/Lea..."

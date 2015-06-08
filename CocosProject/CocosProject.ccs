@@ -1,0 +1,18 @@
+<Solution>
+  <PropertyGroup Name="CocosProject" Version="2.2.8.0" Type="CocosStudio" />
+  <SolutionFolder>
+    <Group ctype="ResourceGroup">
+      <RootFolder Name=".">
+        <Project Name="MainScene.csd" Type="Scene" />
+        <Folder Name="Images">
+          <Image Name="HelloWorld.png" />
+          <Image Name="Leefy-Happy.png" />
+          <Image Name="Leefy-Bump.png" />
+          <Image Name="Leefy-Concern.png" />
+          <Image Name="Branch1.png" />
+          <Image Name="BranchTiny.png" />
+        </Folder>
+      </RootFolder>
+    </Group>
+  </SolutionFolder>
+</Solution>
