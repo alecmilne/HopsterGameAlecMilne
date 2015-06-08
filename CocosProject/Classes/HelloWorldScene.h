@@ -44,9 +44,9 @@ private:
 	cocos2d::EventListenerTouchOneByOne *listener;
 	cocos2d::EventListenerKeyboard *keyListener;
 	int numLeaves;
-	
-	
-	
+	cocos2d::Label *label;
+	void updateScore();
+	int score;
 
 	enum
 	{

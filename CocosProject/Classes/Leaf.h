@@ -32,6 +32,8 @@ private:
 	int getNewTime(int min, int max);
 
 	float blowRotation;
+	int maxBranchTime;
+	int minBranchTime;
 	
 public:
 	cocos2d::Sprite *spriteLeaf;
@@ -45,5 +47,5 @@ public:
 	float fallTime;
 	float fallTimeRemaining;
 
-	void interact();
+	bool interact();
 };

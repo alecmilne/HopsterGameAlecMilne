@@ -12,6 +12,9 @@ void Leaf::init(float positionX, float positionY, cocos2d::Rect area) {
 	spriteLeaf->setAnchorPoint(cocos2d::Vec2(0.5f, 1));
 	
 	spriteLeaf->setScale(0.5f);
+
+	minBranchTime = 1000;
+	maxBranchTime = 6000;
 	
 	leafSpeed = 100;
 	leafMult = 1.0f;
@@ -24,7 +27,7 @@ void Leaf::init(float positionX, float positionY, cocos2d::Rect area) {
 	state = branchStable;
 	swayTime = 1000;
 	growTime = 2000;
-	fallTime = getNewTime(1000, 3000);
+	fallTime = getNewTime(minBranchTime, maxBranchTime);
 	growTimeRemaining = growTime;
 	
 	fallTimeRemaining = fallTime;
@@ -33,14 +36,13 @@ void Leaf::init(float positionX, float positionY, cocos2d::Rect area) {
 	swayAngle = 30;
 
 	spriteLeaf->setPosition(startPosition.x, startPosition.y);
-	//resetLeaf();
 
 	blowRotation = 0;
 }
 
 void Leaf::update(float delta) {
 	cocos2d::Vec2 position = spriteLeaf->getPosition();
-	log("position x: %.f, y: %.f", position.x, position.y);
+	//log("position x: %.f, y: %.f", position.x, position.y);
 	switch (state) {
 	
 	case growing:
@@ -86,7 +88,6 @@ void Leaf::update(float delta) {
 		break;
 		
 	case falling:
-		//position = spriteLeaf->getPosition();
 		position.y -= leafMult * leafSpeed * delta;
 		if (position.y < 0 + (spriteLeaf->getBoundingBox().size.height)) {
 			killLeaf();
@@ -100,9 +101,7 @@ void Leaf::update(float delta) {
 		break;
 
 	case blowingAway:
-		//if (screenArea.containsPoint(spriteLeaf->getPosition())) {
 		if (screenArea.intersectsRect(spriteLeaf->getBoundingBox())) {
-			//position = spriteLeaf->getPosition();
 			position.x += blowingSpeed * delta;
 			spriteLeaf->setPosition(position);
 			blowRotation += delta*100;
@@ -118,42 +117,44 @@ void Leaf::update(float delta) {
 	
 }
 
-void Leaf::interact() {
+bool Leaf::interact() {
 	cocos2d::Vec2 position = spriteLeaf->getPosition();
 	switch (state) {
 	case growing:
 		//Nothing, all good
 		break;
+
 	case branchStable:
 		//Nothing, all good
 		break;
+
 	case branchSway:
 		state = branchStable;
 		updateImage();
 		swayTime *= swayDecrease;
 		resetLeaf();
 		break;
+
 	case falling:
-		//resetLeaf();
-		
 		position.y -= spriteLeaf->getBoundingBox().size.height / 2;
 		spriteLeaf->setAnchorPoint(cocos2d::Vec2(0.5f, 0.5f));
 		spriteLeaf->setPosition(position);
 		
-		
 		state = blowingAway;
-
-
-
 		updateImage();
+		return true;
 		break;
+
 	case dead:
 		//Nothing, already dead
 		break;
+
 	case blowingAway:
 		//Nothing, already saved
 		break;
 	}
+
+	return false;
 }
 
 void Leaf::updateImage() {
@@ -161,18 +162,23 @@ void Leaf::updateImage() {
 	case growing:
 		spriteLeaf->setTexture("Leefy-Happy.png");
 		break;
+
 	case branchStable:
 		spriteLeaf->setTexture("Leefy-Happy.png");
 		break;
+
 	case branchSway:
 		spriteLeaf->setTexture("Leefy-Happy.png");
 		break;
+
 	case falling:
 		spriteLeaf->setTexture("Leefy-Concern.png");
 		break;
+
 	case dead:
 		spriteLeaf->setTexture("Leefy-Bump.png");
 		break;
+
 	case blowingAway:
 		spriteLeaf->setTexture("Leefy-Happy.png");
 		break;
@@ -196,7 +202,7 @@ void Leaf::restartLeaf() {
 }
 
 void Leaf::resetLeaf() {
-	fallTime = getNewTime(1000, 3000);//(rand() % 2000) + 1000;
+	fallTime = getNewTime(minBranchTime, maxBranchTime);
 	
 	growTimeRemaining = growTime;
 	spriteLeaf->setAnchorPoint(cocos2d::Vec2(0.5f, 1));
@@ -206,13 +212,11 @@ void Leaf::resetLeaf() {
 	
 	blowRotation = 0;
 	swayTimeRemaining = swayTime;
-	//spriteLeaf->setScale(0);
 	
 	updateImage();
 }
 
 bool Leaf::isTouched(cocos2d::Vec2 touchPoint) {
-	//if (touchPoint.x >= spriteLeaf->getb
 	if (spriteLeaf->getBoundingBox().containsPoint(touchPoint)) {
 		return true;
 	} else {
